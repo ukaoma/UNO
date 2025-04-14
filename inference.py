@@ -47,7 +47,7 @@ class InferenceArgs:
     eval_json_path: str | None = None
     offload: bool = False
     num_images_per_prompt: int = 1
-    model_type: Literal["flux-dev", "flux-dev-fp8", "flux-schnell"] = "flux-dev"
+    model_type: Literal["flux-dev", "flux-dev-fp8", "flux-schnell", "flux-base"] = "flux-dev"
     width: int = 512
     height: int = 512
     ref_size: int = -1
@@ -59,14 +59,28 @@ class InferenceArgs:
     concat_refs: bool = False
     lora_rank: int = 512
     data_resolution: int = 512
-    pe: Literal['d', 'h', 'w', 'o'] = 'd'
+    pe: Literal['d', 'h', 'w', 'o', 'linear'] = 'd'
+    # Added custom device support
+    device: str | None = None
 
 def main(args: InferenceArgs):
     accelerator = Accelerator()
-
+    
+    # Determine which device to use
+    # If a custom device is provided, use it (for MPS support)
+    device = args.device if args.device is not None else accelerator.device
+    
+    # Print device info for debugging
+    print(f"Using device: {device} for inference")
+    
+    # If device is mps, we need to check compatibility
+    if device == "mps" and args.model_type == "flux-dev-fp8":
+        print("WARNING: flux-dev-fp8 is not compatible with MPS. Switching to flux-schnell")
+        args.model_type = "flux-schnell"
+    
     pipeline = UNOPipeline(
         args.model_type,
-        accelerator.device,
+        device,  # Use our selected device
         args.offload,
         only_lora=args.only_lora,
         lora_rank=args.lora_rank

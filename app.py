@@ -5,6 +5,8 @@ import json
 import random
 import sys
 import time
+import numpy as np
+from PIL import Image
 from pathlib import Path
 from datetime import datetime
 from inference import main as run_inference
@@ -17,13 +19,39 @@ os.makedirs("output/gradio", exist_ok=True)
 VERSION = "1.1.0"
 APP_TITLE = "Ukaoma Image Generation"
 
-# Check if CUDA is available
+# Check PyTorch version
+print(f"PyTorch version: {torch.__version__}")
+
+# Check available devices (CUDA for NVIDIA GPUs, MPS for Apple Silicon)
 CUDA_AVAILABLE = torch.cuda.is_available()
+MPS_AVAILABLE = hasattr(torch.backends, 'mps') and torch.backends.mps.is_available()
+
+# Set device based on availability
 if CUDA_AVAILABLE:
     GPU_NAME = torch.cuda.get_device_name(0)
     VRAM = torch.cuda.get_device_properties(0).total_memory / 1024**3  # Convert to GB
+    DEVICE = "cuda"
+    print(f"Using NVIDIA GPU: {GPU_NAME} with {VRAM:.2f} GB VRAM")
+elif MPS_AVAILABLE:
+    GPU_NAME = "Apple Silicon GPU (M-series)"
+    VRAM = 0  # Unfortunately, PyTorch doesn't provide a way to query Apple Silicon VRAM
+    DEVICE = "mps"
+    print(f"Using Apple Silicon GPU via MPS")
 else:
     GPU_NAME = "No GPU detected"
+    VRAM = 0
+    DEVICE = "cpu"
+    print("WARNING: No GPU detected, falling back to CPU. Processing will be slow.")
+
+# Create a simple test tensor to verify device works
+try:
+    test_tensor = torch.zeros(1, device=DEVICE)
+    print(f"Test tensor created successfully on {DEVICE} device")
+except Exception as e:
+    print(f"Error creating tensor on {DEVICE}: {e}")
+    print("Falling back to CPU")
+    DEVICE = "cpu"
+    GPU_NAME = "GPU detection failed - using CPU"
     VRAM = 0
 
 def generate_image(
@@ -93,6 +121,7 @@ def generate_image(
         data_resolution=512,  # Default
         num_images_per_prompt=1,
         eval_json_path=None,
+        device=DEVICE,  # Pass the detected device to inference.py
     )
     
     # Save args to json for reference
@@ -330,7 +359,26 @@ with gr.Blocks(
     def download_image(img):
         if img is None:
             return None
-        return img
+        
+        # For gradio 3.x compatibility, we need to save the image to a file first
+        if isinstance(img, np.ndarray):
+            # Create a temporary directory if it doesn't exist
+            temp_dir = os.path.join("output", "downloads")
+            os.makedirs(temp_dir, exist_ok=True)
+            
+            # Generate a unique filename
+            filename = f"ukaoma_generation_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+            filepath = os.path.join(temp_dir, filename)
+            
+            # Save the image using PIL
+            Image.fromarray(img).save(filepath)
+            return filepath
+        elif isinstance(img, str):
+            # If it's already a filepath, return it
+            return img
+        else:
+            # Handle other types
+            return None
 
     download_btn.click(
         fn=download_image,
