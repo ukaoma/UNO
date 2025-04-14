@@ -1,0 +1,250 @@
+:root {
+  --primary-color: #6366f1;
+  --primary-color-hover: #4338ca;
+  --secondary-color: #64748b;
+  --dark-bg: #121212;
+  --dark-accent: #1e1e1e;
+  --dark-lighter: #2d2d2d;
+}
+
+/* Main background and text */
+body {
+  background-color: #0f172a;
+  color: white;
+}
+
+/* Header styling */
+h1, h2, h3 {
+  font-weight: 700;
+}
+
+/* Custom footer */
+footer {
+  opacity: 0.7;
+  font-size: 0.8rem;
+}
+
+/* Custom styling for the UI components */
+.gr-form {
+  background-color: var(--dark-accent);
+  border-radius: 12px;
+  border: 1px solid var(--dark-lighter);
+}
+
+.gr-button-primary {
+  background-color: var(--primary-color) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.025em !important;
+  padding: 0.75rem 1.5rem !important;
+  font-size: 1.1rem !important;
+}
+
+.gr-button-primary:hover {
+  background-color: var(--primary-color-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.gr-button-secondary {
+  background-color: #1e293b !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease;
+}
+
+.gr-button-secondary:hover {
+  background-color: #334155 !important;
+  transform: translateY(-1px);
+}
+
+.gr-input, .gr-textarea {
+  background-color: var(--dark-lighter) !important;
+  border: 1px solid #3a3a3a !important;
+  color: white !important;
+  transition: border-color 0.2s ease;
+}
+
+.gr-input:focus, .gr-textarea:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+}
+
+.gr-panel {
+  border-radius: 12px;
+  border: 1px solid var(--dark-lighter);
+  overflow: hidden;
+}
+
+/* Helper text styling */
+.helper-text {
+  font-size: 0.8rem !important;
+  color: #94a3b8 !important;
+  margin-top: -0.25rem !important;
+  margin-bottom: 0.5rem !important;
+  font-style: italic !important;
+}
+
+.helper-text p {
+  margin: 0 !important;
+}
+
+/* Styling for the header area */
+.header-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: var(--dark-accent);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom styling for the file upload box */
+.file-upload-box {
+  border: 2px dashed #3a3a3a;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.file-upload-box:hover {
+  border-color: var(--primary-color);
+  background-color: rgba(99, 102, 241, 0.1);
+  cursor: pointer;
+}
+
+.file-upload-box.active {
+  border-color: var(--primary-color);
+  background-color: rgba(99, 102, 241, 0.2);
+}
+
+/* Styling for the output image container */
+.output-container {
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--dark-accent);
+  border: 1px solid #3a3a3a;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.output-container:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Status message styling */
+.status-message {
+  border-left: 4px solid var(--primary-color);
+  padding-left: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Custom slider styling */
+.gr-slider-thumb {
+  background-color: var(--primary-color) !important;
+  border: 2px solid white !important;
+  height: 18px !important;
+  width: 18px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.gr-slider-track {
+  background-color: var(--dark-lighter) !important;
+  height: 6px !important;
+}
+
+/* Custom checkbox styling */
+.gr-checkbox {
+  accent-color: var(--primary-color);
+  transform: scale(1.2);
+  margin-right: 0.5rem;
+}
+
+/* Add a subtle hover effect for interactive elements */
+.interactive-hover:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s;
+}
+
+/* Progress bar styling */
+.progress-container {
+  width: 100%;
+  height: 8px;
+  background-color: var(--dark-lighter);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--primary-color);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Generate button specific styling */
+.generate-btn {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, #6366f1, #4f46e5, #4338ca);
+  background-size: 200% auto;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Advanced settings accordion */
+.advanced-settings {
+  background-color: rgba(30, 41, 59, 0.5);
+  border-radius: 8px;
+}
+
+/* Example section styling */
+.gr-examples-container {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-top: 1px solid #3a3a3a;
+  padding-top: 1rem;
+}
+
+.gr-examples h3 {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.gr-examples-parent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gr-examples-parent > div {
+  transition: all 0.2s ease;
+}
+
+.gr-examples-parent > div:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
